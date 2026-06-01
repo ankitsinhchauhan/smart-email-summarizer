@@ -1,2 +1,3 @@
-# smart-email-summarizer
-A Python-based NLP application that summarizes long emails and articles using Hugging Face Transformers and FastAPI.
+# Smart Email Summarizer
+
+An AI-powered email and article summarization application built with Python, Hugging Face Transformers, and FastAPI.
