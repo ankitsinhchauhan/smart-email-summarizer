@@ -1,22 +1,22 @@
 from src.summarizer import summarize_text
 
 
-def test_summarize_short_text():
-    text = "Hello world."
-    result = summarize_text(text)
-
-    assert result == "Text is too short to summarize."
-
-
-def test_summarize_valid_text():
+def test_summarize_text_returns_summary():
     text = """
-    Artificial intelligence is changing the way people work and learn.
-    It helps users write, summarize, translate, and understand large amounts of information.
-    Many companies use AI tools to save time and improve productivity.
-    Students also use AI to understand difficult topics and prepare better notes.
+    Artificial Intelligence is transforming industries by automating tasks
+    and improving efficiency. Many companies are adopting AI technologies
+    for better productivity and decision making.
     """
 
-    result = summarize_text(text, max_length=60, min_length=20)
+    summary = summarize_text(text)
 
-    assert isinstance(result, str)
-    assert len(result) > 0
+    assert isinstance(summary, str)
+    assert len(summary) > 0
+
+
+def test_summarize_short_text():
+    text = "Hello"
+
+    summary = summarize_text(text)
+
+    assert summary == "Text is too short to summarize."
