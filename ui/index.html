@@ -1,120 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Email Summarizer</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Email Summarizer</title>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            padding: 40px;
-        }
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 30px;
+    }
 
-        .container {
-            max-width: 800px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-        }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
 
-        h1 {
-            text-align: center;
-        }
+    h1 {
+      text-align: center;
+    }
 
-        textarea {
-            width: 100%;
-            height: 250px;
-            padding: 10px;
-            margin-top: 10px;
-            font-size: 16px;
-        }
+    textarea {
+      width: 100%;
+      height: 220px;
+      padding: 12px;
+      font-size: 16px;
+      resize: vertical;
+    }
 
-        button {
-            margin-top: 15px;
-            padding: 12px 20px;
-            font-size: 16px;
-            cursor: pointer;
-        }
+    .controls {
+      margin-top: 15px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
 
-        .summary-box {
-            margin-top: 20px;
-            background: #f0f0f0;
-            padding: 15px;
-            border-radius: 5px;
-        }
+    input {
+      width: 100px;
+      padding: 8px;
+    }
 
-        input {
-            margin-top: 10px;
-            padding: 8px;
-            width: 100px;
-        }
-    </style>
+    button {
+      padding: 10px 18px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      background: #2563eb;
+      color: white;
+      border-radius: 6px;
+    }
+
+    button:disabled {
+      background: gray;
+      cursor: not-allowed;
+    }
+
+    .loading {
+      display: none;
+      margin-top: 20px;
+      color: #2563eb;
+      font-weight: bold;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 3px solid #ddd;
+      border-top: 3px solid #2563eb;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .summary-box {
+      margin-top: 25px;
+      background: #f9fafb;
+      padding: 15px;
+      border-left: 5px solid #2563eb;
+      border-radius: 6px;
+      min-height: 60px;
+      white-space: pre-wrap;
+    }
+
+    .error {
+      color: red;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 
 <body>
+  <div class="container">
+    <h1>Smart Email Summarizer</h1>
 
-    <div class="container">
-        <h1>Smart Email Summarizer</h1>
+    <textarea id="emailText" placeholder="Paste your long email or article here..."></textarea>
 
-        <textarea id="inputText" placeholder="Paste your email or article here..."></textarea>
+    <div class="controls">
+      <label>
+        Max:
+        <input type="number" id="maxLength" value="100" />
+      </label>
 
-        <br>
+      <label>
+        Min:
+        <input type="number" id="minLength" value="30" />
+      </label>
 
-        <label>Max Length:</label>
-        <input type="number" id="maxLength" value="100">
-
-        <label>Min Length:</label>
-        <input type="number" id="minLength" value="30">
-
-        <br>
-
-        <button onclick="summarizeText()">Generate Summary</button>
-
-        <div class="summary-box">
-            <h3>Summary:</h3>
-            <p id="summaryResult"></p>
-        </div>
+      <button id="summarizeBtn" onclick="summarizeText()">Summarize</button>
     </div>
 
-    <script>
-        async function summarizeText() {
+    <div id="loading" class="loading">
+      <span class="spinner"></span>
+      Summary generate થઈ રહી છે... Please wait.
+    </div>
 
-            const text = document.getElementById("inputText").value;
+    <div id="error" class="error"></div>
 
-            const maxLength = parseInt(
-                document.getElementById("maxLength").value
-            );
+    <h2>Summary:</h2>
+    <div id="summary" class="summary-box">
+      Summary અહીં દેખાશે.
+    </div>
+  </div>
 
-            const minLength = parseInt(
-                document.getElementById("minLength").value
-            );
+  <script>
+    async function summarizeText() {
+      const text = document.getElementById("emailText").value.trim();
+      const maxLength = Number(document.getElementById("maxLength").value);
+      const minLength = Number(document.getElementById("minLength").value);
 
-            const response = await fetch(
-                "http://127.0.0.1:8000/summarize",
-                {
-                    method: "POST",
+      const button = document.getElementById("summarizeBtn");
+      const loading = document.getElementById("loading");
+      const summary = document.getElementById("summary");
+      const error = document.getElementById("error");
 
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
+      error.innerText = "";
+      summary.innerText = "";
 
-                    body: JSON.stringify({
-                        text: text,
-                        max_length: maxLength,
-                        min_length: minLength
-                    })
-                }
-            );
+      if (text.length < 50) {
+        error.innerText = "Please enter longer text. Minimum 50 characters required.";
+        return;
+      }
 
-            const data = await response.json();
+      if (minLength >= maxLength) {
+        error.innerText = "Min length max length કરતાં નાની હોવી જોઈએ.";
+        return;
+      }
 
-            document.getElementById("summaryResult").innerText =
-                data.summary;
+      button.disabled = true;
+      button.innerText = "Generating...";
+      loading.style.display = "block";
+      summary.innerText = "Please wait, model summary બનાવી રહ્યું છે...";
+
+      try {
+        const response = await fetch("http://127.0.0.1:8000/summarize", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            text: text,
+            max_length: maxLength,
+            min_length: minLength
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error("Backend error. Please check FastAPI terminal.");
         }
-    </script>
 
+        const data = await response.json();
+        summary.innerText = data.summary || "No summary received.";
+
+      } catch (err) {
+        error.innerText = "Something went wrong. Backend running છે કે નહીં check કરો.";
+        summary.innerText = "";
+      } finally {
+        button.disabled = false;
+        button.innerText = "Summarize";
+        loading.style.display = "none";
+      }
+    }
+  </script>
 </body>
 </html>
