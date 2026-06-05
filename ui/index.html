@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Email Summarizer</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        textarea {
+            width: 100%;
+            height: 250px;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .summary-box {
+            margin-top: 20px;
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        input {
+            margin-top: 10px;
+            padding: 8px;
+            width: 100px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Smart Email Summarizer</h1>
+
+        <textarea id="inputText" placeholder="Paste your email or article here..."></textarea>
+
+        <br>
+
+        <label>Max Length:</label>
+        <input type="number" id="maxLength" value="100">
+
+        <label>Min Length:</label>
+        <input type="number" id="minLength" value="30">
+
+        <br>
+
+        <button onclick="summarizeText()">Generate Summary</button>
+
+        <div class="summary-box">
+            <h3>Summary:</h3>
+            <p id="summaryResult"></p>
+        </div>
+    </div>
+
+    <script>
+        async function summarizeText() {
+
+            const text = document.getElementById("inputText").value;
+
+            const maxLength = parseInt(
+                document.getElementById("maxLength").value
+            );
+
+            const minLength = parseInt(
+                document.getElementById("minLength").value
+            );
+
+            const response = await fetch(
+                "http://127.0.0.1:8000/summarize",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        text: text,
+                        max_length: maxLength,
+                        min_length: minLength
+                    })
+                }
+            );
+
+            const data = await response.json();
+
+            document.getElementById("summaryResult").innerText =
+                data.summary;
+        }
+    </script>
+
+</body>
+</html>
