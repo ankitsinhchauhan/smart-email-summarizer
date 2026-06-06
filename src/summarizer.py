@@ -15,7 +15,7 @@ def summarize_text(
 ) -> str:
     cleaned_text = clean_text(text)
 
-    if len(cleaned_text) < 50:
+    if len(cleaned_text) < 100:
         return "Text is too short to summarize."
 
     result = summarizer_pipeline(
