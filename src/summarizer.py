@@ -26,4 +26,4 @@ def summarize_text(
     truncation=True
     )
 
-    return result[0]["summary_text"]
+   
