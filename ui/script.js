@@ -117,7 +117,7 @@ async function summarizeText() {
 
   try {
     const response = await fetch(
-      "https://smart-email-summarizer-guuy.onrender.com/summarize",
+      "https://smart-email-summarizer-1.onrender.com//summarize",
       {
         method: "POST",
         headers: {
@@ -172,7 +172,7 @@ async function summarizeFile() {
 
   try {
     const response = await fetch(
-      "https://smart-email-summarizer-guuy.onrender.com/summarize-file",
+      "https://smart-email-summarizer-1.onrender.com/summarize-file",
       {
         method: "POST",
         body: formData,
