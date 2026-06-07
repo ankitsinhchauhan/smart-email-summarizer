@@ -1,10 +1,17 @@
 from fastapi import FastAPI, UploadFile, File, Form
 from pydantic import BaseModel
 from src.summarizer import summarize_text
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Smart Email Summarizer")
 
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 class SummaryRequest(BaseModel):
     text: str
     max_length: int = 130
