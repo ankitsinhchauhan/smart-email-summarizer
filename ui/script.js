@@ -116,17 +116,20 @@ async function summarizeText() {
   startLoading();
 
   try {
-    const response = await fetch("http://127.0.0.1:8000/summarize", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      "https://smart-email-summarizer-guuy.onrender.com/summarize",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          text: text,
+          max_length: maxLength,
+          min_length: minLength,
+        }),
       },
-      body: JSON.stringify({
-        text: text,
-        max_length: maxLength,
-        min_length: minLength,
-      }),
-    });
+    );
 
     if (!response.ok) {
       throw new Error("Server error. Please check your FastAPI backend.");
@@ -168,10 +171,13 @@ async function summarizeFile() {
   startLoading();
 
   try {
-    const response = await fetch("http://127.0.0.1:8000/summarize-file", {
-      method: "POST",
-      body: formData,
-    });
+    const response = await fetch(
+      "https://smart-email-summarizer-guuy.onrender.com/summarize-file",
+      {
+        method: "POST",
+        body: formData,
+      },
+    );
 
     if (!response.ok) {
       throw new Error("Server error. Please check your FastAPI backend.");
