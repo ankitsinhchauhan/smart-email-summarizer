@@ -113,10 +113,4 @@ pytest
 
 ---
 
-# Future Improvements
 
-- PDF support
-- DOCX support
-- Download summary option
-
----
