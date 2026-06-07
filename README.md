@@ -113,4 +113,33 @@ pytest
 
 ---
 
+# Live Deployment
 
+Poject URL: https://smart-email-summarizer-pi.vercel.app/
+
+## Frontend (Vercel)
+
+Frontend is deployed on Vercel for fast and responsive UI hosting.
+
+---
+
+## Backend (Render)
+
+FastAPI backend is deployed on Render.
+
+---
+
+# Deployment Platforms
+
+- Vercel (Frontend Hosting)
+- Render (Backend Hosting)
+
+---
+
+# Deployment Notes
+
+- Frontend and backend are deployed separately
+- CORS middleware is enabled for frontend-backend communication
+- Backend APIs are connected using fetch requests
+
+---
