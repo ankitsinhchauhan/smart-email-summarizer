@@ -108,8 +108,8 @@ async function summarizeText() {
 
   if (!validateLengths(minLength, maxLength)) return;
 
-  if (text.length < 300) {
-    showError("Please enter at least 300 characters.");
+  if (text.length < 200) {
+    showError("Please enter at least 200 characters.");
     return;
   }
 

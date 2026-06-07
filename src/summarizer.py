@@ -3,7 +3,7 @@ from src.preprocess import clean_text
 
 def summarize_text(
     text: str,
-    max_length: int = 130,
+    max_length: int = 150,
     min_length: int = 30
 ) -> str:
     cleaned_text = clean_text(text)

@@ -14,7 +14,7 @@ app.add_middleware(
 )
 class SummaryRequest(BaseModel):
     text: str
-    max_length: int = 130
+    max_length: int = 150
     min_length: int = 30
 
 @app.get("/")
