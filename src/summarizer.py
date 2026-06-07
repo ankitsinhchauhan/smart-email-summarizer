@@ -1,7 +1,7 @@
 from transformers import pipeline
 from src.preprocess import clean_text
 
-MODEL_NAME = "facebook/bart-large-cnn"
+MODEL_NAME = "sshleifer/distilbart-cnn-12-6"
 
 summarizer_pipeline = pipeline(
     "summarization",
